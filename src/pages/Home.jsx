@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { IoFilter } from 'react-icons/io5';
 import PokemonCard from '../components/PokemonCard';
@@ -13,11 +13,11 @@ const Home = () => {
   const [selectedPokemon, setSelectedPokemon] = useState(null);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [types, setTypes] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch Pokemon
         const pokemonResponse = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=151');
         const pokemonResults = pokemonResponse.data.results;
         
@@ -28,7 +28,6 @@ const Home = () => {
           })
         );
         
-        // Fetch Types
         const typesResponse = await axios.get('https://pokeapi.co/api/v2/type');
         
         setPokemons(pokemonData);
@@ -47,20 +46,38 @@ const Home = () => {
   const handleFiltersChange = (filters) => {
     let filtered = [...pokemons];
 
-    if (filters.searchTerm) {
-      filtered = filtered.filter(pokemon => 
-        pokemon.name.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
-        pokemon.id.toString().includes(filters.searchTerm)
-      );
+    const currentSearchTerm = filters.searchTerm || searchTerm;
+    if (currentSearchTerm) {
+      filtered = filtered.filter(pokemon => {
+        const searchLower = currentSearchTerm.toLowerCase();
+        const pokemonId = String(pokemon.id).padStart(3, '0');
+        
+        // Exact match for ID (including padded zeros)
+        if (pokemonId === currentSearchTerm) {
+          return true;
+        }
+        
+        // Exact match for raw ID
+        if (pokemon.id.toString() === currentSearchTerm) {
+          return true;
+        }
+        
+        // Name match (case insensitive)
+        if (pokemon.name.toLowerCase().includes(searchLower)) {
+          return true;
+        }
+        
+        return false;
+      });
     }
 
-    if (filters.selectedTypes.length > 0) {
+    if (filters.selectedTypes?.length > 0) {
       filtered = filtered.filter(pokemon =>
         pokemon.types.some(type => filters.selectedTypes.includes(type.type.name))
       );
     }
 
-    if (filters.selectedGenders.length > 0) {
+    if (filters.selectedGenders?.length > 0) {
       // Implement gender filtering logic here
     }
 
@@ -74,6 +91,11 @@ const Home = () => {
     }
 
     setFilteredPokemons(filtered);
+  };
+
+  const handleMobileSearch = (value) => {
+    setSearchTerm(value);
+    handleFiltersChange({ searchTerm: value });
   };
 
   const handlePokemonNavigation = (direction) => {

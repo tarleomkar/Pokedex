@@ -2,24 +2,24 @@ import React, { useState, useEffect } from "react";
 import { IoClose, IoChevronBack, IoChevronForward } from "react-icons/io5";
 
 const typeColors = {
-  normal: "bg-[#DDCBD0]",
-  fire: "bg-[#EDC2C4]",
-  water: "bg-[#CBD5ED]",
-  electric: "bg-[#E2E2A0]",
-  grass: "bg-[#C0D4C8]",
-  ice: "bg-[#C7D7DF]",
-  fighting: "bg-[#FCC1B0]",
-  poison: "bg-[#CFB7ED]",
-  ground: "bg-[#F4D1A6]",
-  flying: "bg-[#B2D2E8]",
-  psychic: "bg-[#DDC0CF]",
-  bug: "bg-[#C1E0C8]",
-  rock: "bg-[#C5AEA8]",
-  ghost: "bg-[#D7C2D7]",
-  dragon: "bg-[#CADCDF]",
-  dark: "bg-[#C6C5E3]",
-  steel: "bg-[#C2D4CE]",
-  fairy: "bg-[#E4C0CF]",
+  normal: "#DDCBD0",
+  fire: "#EDC2C4",
+  water: "#CBD5ED",
+  electric: "#E2E2A0",
+  grass: "#C0D4C8",
+  ice: "#C7D7DF",
+  fighting: "#FCC1B0",
+  poison: "#CFB7ED",
+  ground: "#F4D1A6",
+  flying: "#B2D2E8",
+  psychic: "#DDC0CF",
+  bug: "#C1E0C8",
+  rock: "#C5AEA8",
+  ghost: "#D7C2D7",
+  dragon: "#CADCDF",
+  dark: "#C6C5E3",
+  steel: "#C2D4CE",
+  fairy: "#E4C0CF",
 };
 
 const PokemonModal = ({
@@ -35,6 +35,15 @@ const PokemonModal = ({
   const [weaknesses, setWeaknesses] = useState([]);
   const [genders, setGenders] = useState([]);
   const [eggGroups, setEggGroups] = useState([]);
+
+  // Get gradient background for Pokemon
+  const getGradientBackground = (types) => {
+    const firstType = types[0]?.type.name || 'normal';
+    const secondType = types[1]?.type.name || firstType;
+    const firstColor = typeColors[firstType];
+    const secondColor = typeColors[secondType];
+    return `linear-gradient(to bottom, ${firstColor}, ${secondColor})`;
+  };
 
   useEffect(() => {
     const fetchPokemonDetails = async () => {
@@ -70,8 +79,8 @@ const PokemonModal = ({
             evolutions.push({
               name: current.species.name,
               id: pokemonData.id,
-              image:
-                pokemonData.sprites.other["official-artwork"].front_default,
+              image: pokemonData.sprites.other["official-artwork"].front_default,
+              types: pokemonData.types // Add types for gradient background
             });
 
             current = current.evolves_to[0];
@@ -111,38 +120,20 @@ const PokemonModal = ({
   return (
     <div className="fixed inset-0 bg-[#2E3156E5] blur-none bg-opacity-50 z-50 flex items-center justify-center p-4">
       <div className="relative bg-[#deeded] rounded-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto">
-        {/* Header with Name, ID, and Navigation */}
-        {/* <div className="relative top-0 z-10 p-4 flex justify-end items-center">
-           <div className="flex items-center gap-4">
-            <h2 className="text-xl font-bold capitalize">{pokemon.name}</h2>
-            <div className="flex items-center gap-2">
-              <p className="text-xl text-gray-600">
-                {String(pokemon.id).padStart(3, "0")}
-              </p>
-              <button onClick={() => onNavigate("prev")} className="text-2xl">
-                <IoChevronBack />
-              </button>
-              <button onClick={onClose} className="text-2xl">
-                <IoClose />
-              </button>
-              <button onClick={() => onNavigate("next")} className="text-2xl">
-                <IoChevronForward />
-              </button>
-            </div>
-          </div> 
-        </div> */}
-
         <div className="p-6 space-y-8">
           {/* Image and Description Section */}
           <div className="flex flex-col md:flex-row gap-8">
             <div className="md:w-1/3 mt-5">
-              {" "}
-              {/* Adjust mt-4 as needed */}
-              <img
-                src={pokemon.sprites.other["official-artwork"].front_default}
-                alt={pokemon.name}
-                className="w-auto min-w-[150px] min-h-[150px] rounded-lg overflow-hidden bg-opacity-20 border-2 border-gray-500 hover:scale-105 transition-all duration-300 transform cursor-pointer border-dashed"
-              />
+              <div 
+                className="w-full h-full min-w-[150px] min-h-[150px] rounded-lg overflow-hidden border-2 border-gray-500 hover:scale-105 transition-all duration-300 transform cursor-pointer border-dashed"
+                style={{ background: getGradientBackground(pokemon.types) }}
+              >
+                <img
+                  src={pokemon.sprites.other["official-artwork"].front_default}
+                  alt={pokemon.name}
+                  className="w-full h-full object-contain p-4"
+                />
+              </div>
             </div>
 
             <div className="md:w-2/3">
@@ -154,7 +145,7 @@ const PokemonModal = ({
                   <img
                     src="https://res.cloudinary.com/draodxztu/image/upload/v1738316989/seperator_pzauqv.png"
                     alt="Separator"
-                    className="hidden md:block mx-4 text-slate-600 "
+                    className="hidden md:block mx-4 text-slate-600"
                   />
                   <p className="text-xl text-blue-950">
                     {String(pokemon.id).padStart(3, "0")}
@@ -164,28 +155,20 @@ const PokemonModal = ({
                     alt="Separator"
                     className="hidden md:block mx-4 text-slate-600"
                   />
-                  <button
-                    onClick={() => onNavigate("prev")}
-                    className="text-2xl"
-                  >
+                  <button onClick={() => onNavigate("prev")} className="text-2xl">
                     <IoChevronBack />
                   </button>
                   <button onClick={onClose} className="text-2xl">
                     <IoClose />
                   </button>
-                  <button
-                    onClick={() => onNavigate("next")}
-                    className="text-2xl"
-                  >
+                  <button onClick={() => onNavigate("next")} className="text-2xl">
                     <IoChevronForward />
                   </button>
                 </div>
               </div>
 
               <p className="text-blue-950">
-                {showFullDescription
-                  ? description
-                  : description?.split("\n")[0]}
+                {showFullDescription ? description : description?.split("\n")[0]}
                 {description?.split("\n").length > 1 && (
                   <button
                     onClick={() => setShowFullDescription(!showFullDescription)}
@@ -244,7 +227,7 @@ const PokemonModal = ({
                   <span
                     key={type.type.name}
                     className={`px-3 py-1 rounded-xl border-2 border-blue-950 text-blue-950 ${
-                      typeColors[type.type.name]
+                      `bg-[${typeColors[type.type.name]}]`
                     }`}
                   >
                     {type.type.name}
@@ -259,7 +242,7 @@ const PokemonModal = ({
                 {weaknesses.map((weakness) => (
                   <span
                     key={weakness}
-                    className={`px-3 py-1 rounded-xl border-2 border-blue-950 text-blue-950  ${typeColors[weakness]}`}
+                    className={`px-3 py-1 rounded-xl border-2 border-blue-950 text-blue-950 bg-[${typeColors[weakness]}]`}
                   >
                     {weakness}
                   </span>
@@ -275,10 +258,7 @@ const PokemonModal = ({
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {pokemon.stats.map((stat) => (
-                <div
-                  key={stat.stat.name}
-                  className="flex items-center space-x-3"
-                >
+                <div key={stat.stat.name} className="flex items-center space-x-3">
                   <span className="font-medium capitalize w-24 text-blue-950">
                     {stat.stat.name}
                   </span>
@@ -306,11 +286,14 @@ const PokemonModal = ({
             <div className="flex flex-wrap justify-start items-center gap-4">
               {evolutionChain.map((evolution, index) => (
                 <React.Fragment key={evolution.id}>
-                  <div className="rounded-lg shadow-lg overflow-hidden bg-opacity-20 border-2 p-4 border-gray-500 hover:scale-105 transition-all duration-300 transform cursor-pointer border-dashed">
+                  <div 
+                    className="rounded-lg shadow-lg overflow-hidden border-2 p-4 border-gray-500 hover:scale-105 transition-all duration-300 transform cursor-pointer border-dashed"
+                    style={{ background: getGradientBackground(evolution.types) }}
+                  >
                     <img
                       src={evolution.image}
                       alt={evolution.name}
-                      className="w-24 h-24 mx-auto mb-2"
+                      className="w-24 h-24 mx-auto mb-2 object-contain"
                     />
                     <p className="font-bold capitalize text-center text-blue-950">
                       {evolution.name}
@@ -342,12 +325,12 @@ const PokemonModal = ({
             )}
             {nextPokemon && (
               <button
-              onClick={() => onNavigate("next")}
-              className="flex items-center justify-center gap-2 px-4 py-2 text-white rounded-r-lg rounded-l-lg bg-[#2C2C54]"
-            >
-              <span className="capitalize">{nextPokemon.name}</span>
-              <IoChevronForward />
-            </button>            
+                onClick={() => onNavigate("next")}
+                className="flex items-center justify-center gap-2 px-4 py-2 text-white rounded-r-lg rounded-l-lg bg-[#2C2C54]"
+              >
+                <span className="capitalize">{nextPokemon.name}</span>
+                <IoChevronForward />
+              </button>
             )}
           </div>
         </div>

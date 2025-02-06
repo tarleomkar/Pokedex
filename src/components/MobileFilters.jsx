@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { IoClose, IoAdd, IoRemove } from 'react-icons/io5';
 
 const MobileFilters = ({ types, onClose, onApply, onReset }) => {
@@ -21,13 +21,47 @@ const MobileFilters = ({ types, onClose, onApply, onReset }) => {
     }));
   };
 
+  const getTypeDisplayText = () => {
+    if (selectedTypes.length === 0) {
+      return "Normal + 19 More";
+    }
+    if (selectedTypes.length === 1) {
+      return selectedTypes[0].charAt(0).toUpperCase() + selectedTypes[0].slice(1);
+    }
+    return `${selectedTypes[0].charAt(0).toUpperCase() + selectedTypes[0].slice(1)} + ${selectedTypes.length - 1} More`;
+  };
+
+  const getGenderDisplayText = () => {
+    if (selectedGenders.length === 0) {
+      return "Male + 2 More";
+    }
+    if (selectedGenders.length === 1) {
+      return selectedGenders[0].charAt(0).toUpperCase() + selectedGenders[0].slice(1);
+    }
+    return `${selectedGenders[0].charAt(0).toUpperCase() + selectedGenders[0].slice(1)} + ${selectedGenders.length - 1} More`;
+  };
+
   const handleApply = () => {
     onApply({ selectedTypes, selectedGenders, stats });
     onClose();
   };
 
+  const handleReset = () => {
+    setSelectedTypes([]);
+    setSelectedGenders([]);
+    setStats({
+      hp: 0,
+      attack: 0,
+      defense: 0,
+      'special-attack': 0,
+      'special-defense': 0,
+      speed: 0
+    });
+    onReset();
+  };
+
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
+    <div className="fixed inset-0 bg-white z-50 overflow-y-auto">
       <div className="p-4">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-bold">Filters</h2>
@@ -42,7 +76,7 @@ const MobileFilters = ({ types, onClose, onApply, onReset }) => {
             className="flex justify-between items-center p-3 bg-gray-50 rounded-lg"
             onClick={() => toggleSection('type')}
           >
-            <span className="font-medium">Type (Normal + 19 More)</span>
+            <span className="font-medium">{`Type (${getTypeDisplayText()})`}</span>
             {expandedSections.type ? <IoRemove /> : <IoAdd />}
           </div>
           {expandedSections.type && (
@@ -74,7 +108,7 @@ const MobileFilters = ({ types, onClose, onApply, onReset }) => {
             className="flex justify-between items-center p-3 bg-gray-50 rounded-lg"
             onClick={() => toggleSection('gender')}
           >
-            <span className="font-medium">Gender (Male + 2 More)</span>
+            <span className="font-medium">{`Gender (${getGenderDisplayText()})`}</span>
             {expandedSections.gender ? <IoRemove /> : <IoAdd />}
           </div>
           {expandedSections.gender && (
@@ -138,7 +172,7 @@ const MobileFilters = ({ types, onClose, onApply, onReset }) => {
         <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t">
           <div className="flex gap-4">
             <button
-              onClick={onReset}
+              onClick={handleReset}
               className="flex-1 py-2 bg-gray-200 rounded-lg"
             >
               Reset
