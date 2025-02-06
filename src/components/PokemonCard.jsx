@@ -1,23 +1,24 @@
 const typeColors = {
-  normal: 'bg-gray-400',
-  fire: 'bg-red-500',
-  water: 'bg-blue-500',
-  electric: 'bg-yellow-400',
-  grass: 'bg-green-500',
-  ice: 'bg-blue-200',
-  fighting: 'bg-red-600',
-  poison: 'bg-purple-500',
-  ground: 'bg-yellow-600',
-  flying: 'bg-indigo-400',
-  psychic: 'bg-pink-500',
-  bug: 'bg-green-400',
-  rock: 'bg-yellow-800',
-  ghost: 'bg-purple-600',
-  dragon: 'bg-indigo-600',
-  dark: 'bg-gray-800',
-  steel: 'bg-gray-500',
-  fairy: 'bg-pink-400'
+  normal: "bg-gradient-to-b from-[#DDCBD0] to-[#E0D4D1]",
+  fire: "bg-gradient-to-b from-[#EDC2C4] to-[#F1D1D3]",
+  water: "bg-gradient-to-b from-[#CBD5ED] to-[#B2C9E1]",
+  electric: "bg-gradient-to-b from-[#E2E2A0] to-[#F0E3A1]",
+  grass: "bg-gradient-to-b from-[#C0D4C8] to-[#A8C5B6]",
+  ice: "bg-gradient-to-b from-[#C7D7DF] to-[#A5B8C4]",
+  fighting: "bg-gradient-to-b from-[#FCC1B0] to-[#F7C9B3]",
+  poison: "bg-gradient-to-b from-[#CFB7ED] to-[#D2A7E6]",
+  ground: "bg-gradient-to-b from-[#F4D1A6] to-[#F7D79B]",
+  flying: "bg-gradient-to-b from-[#B2D2E8] to-[#A0C2D9]",
+  psychic: "bg-gradient-to-b from-[#DDC0CF] to-[#E1B3C4]",
+  bug: "bg-gradient-to-b from-[#C1E0C8] to-[#A6D0B7]",
+  rock: "bg-gradient-to-b from-[#C5AEA8] to-[#BDA49D]",
+  ghost: "bg-gradient-to-b from-[#D7C2D7] to-[#D4A9D5]",
+  dragon: "bg-gradient-to-b from-[#CADCDF] to-[#B1C8D3]",
+  dark: "bg-gradient-to-b from-[#C6C5E3] to-[#B9B7D0]",
+  steel: "bg-gradient-to-b from-[#C2D4CE] to-[#A8B8AC]",
+  fairy: "bg-gradient-to-b from-[#E4C0CF] to-[#E1B5C4]",
 };
+
 
 const PokemonCard = ({ pokemon }) => {
   const mainType = pokemon.types[0]?.type.name || 'normal';

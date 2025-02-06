@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { IoClose, IoAdd, IoRemove } from 'react-icons/io5';
 
 const MobileFilters = ({ types, onClose, onApply, onReset }) => {
@@ -27,7 +27,7 @@ const MobileFilters = ({ types, onClose, onApply, onReset }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-white z-50 overflow-y-auto">
+    <div className="fixed inset-0 z-50 overflow-y-auto">
       <div className="p-4">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-bold">Filters</h2>
